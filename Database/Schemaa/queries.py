@@ -45,8 +45,8 @@ quantity INTEGER,
 unit_price REAL)"""
 
 
-order_table_query="""
-CREATE TABLE order(
+orders_table_query="""
+CREATE TABLE orders(
 id INTEGER PRIMARY KEY,
 user_id INTEGER,
 status  TEXT,
