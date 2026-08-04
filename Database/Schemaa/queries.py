@@ -1,6 +1,6 @@
 users_table_query="""
 CREATE TABLE users(
-id INTEGER PRIMARY KEY ,
+id TEXT PRIMARY KEY,
 first_name TEXT,
 last_name TEXT,
 email TEXT UNIQUE,
@@ -14,7 +14,7 @@ updated_at TEXT
 
 products_table_query="""
 CREATE TABLE products(
-id INTEGER PRIMARY KEY ,
+id  TEXT PRIMARY KEY ,
 name TEXT,
 descri TEXT,
 sku  TEXT UNIQUE,
@@ -30,25 +30,25 @@ updated_at TEXT)"""
 
 carts_table_query="""
 CREATE TABLE carts(
-id INTEGER PRIMARY KEY,
-user_id INTEGER,
+id TEXT PRIMARY KEY,
+user_id TEXT,
 created_at TEXT,
 updated_at TEXT)"""
 
 
 cart_items_table_query="""
 CREATE TABLE cart_items(
-id INTEGER PRIMARY KEY,
-cart_id INTEGER,
-product_id INTEGER,
+id TEXT PRIMARY KEY,
+cart_id TEXT,
+product_id TEXT,
 quantity INTEGER,
 unit_price REAL)"""
 
 
 orders_table_query="""
 CREATE TABLE orders(
-id INTEGER PRIMARY KEY,
-user_id INTEGER,
+id TEXT PRIMARY KEY,
+user_id TEXT,
 status  TEXT,
 total_amount REAL,
 shipping_address TEXT,
@@ -58,9 +58,9 @@ updated_at  TEXT)"""
 
 order_items_table_query="""
 CREATE TABLE order_items(
-id	INTEGER PRIMARY KEY,
-order_id	INTEGER,
-product_id	INTEGER,
+id TEXT PRIMARY KEY,
+order_id TEXT,
+product_id TEXT,
 quantity	Integer,
 unit_price	REAL,
 subtotal    REAL)"""

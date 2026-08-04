@@ -1,6 +1,6 @@
-from connection import conn, cursor
+from Database.connection import conn, cursor
 
-from Schema.queries import (
+from Database.Schemaa.queries import (
     users_table_query,
     products_table_query,
     carts_table_query,
