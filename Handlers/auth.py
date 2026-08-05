@@ -1,10 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,HTTPException
 import uuid
 from database.connection import conn, cursor
 from model.models import UserRegister, UserLogin
 from passlib.context import CryptContext
-from jose import jwt
-from datetime import datetime,timedelta
+from jose import jwt,JWTError
+from datetime import datetime,timedelta,timezone
 # Router
 router= APIRouter()
 
@@ -16,6 +16,21 @@ pwd_context = CryptContext(
 #JWT
 SECRET_KEY="my_secret_key"
 ALGORITHM="HS256"
+
+def verify_token(token:str):
+    try:
+        payload=jwt.decode(
+           token,
+           SECRET_KEY,
+           algorithms=[ALGORITHM] #list for multiple algo
+    )
+        return payload
+    except JWTError:
+        raise HTTPException(
+        status_code=401,
+        detail="INVALID TOKEN"
+
+        )
 
 # To register users
 @router.post("/register")
@@ -62,7 +77,7 @@ def login(user:UserLogin):
         return{
             "message":"Invalid Password"
         }
-    expire=datetime.utcnow()+timedelta(minutes=30)
+    expire=datetime.now(timezone.utc)+timedelta(minutes=30)
 
     payload={
 
