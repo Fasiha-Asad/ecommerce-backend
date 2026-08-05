@@ -1,18 +1,21 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
 import uuid
-from Database.connection import conn, cursor
+from database.connection import conn, cursor
+from model.models import UserRegister, UserLogin
+from passlib.context import CryptContext
+# Router
 router= APIRouter()
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto"
+)
 
-class UserRegister(BaseModel):
-    first_name : str
-    last_name : str
-    email : str
-    password : str
 
+# To register users
 @router.post("/register")
 def register(user:UserRegister):
     user_id = str(uuid.uuid4())
+    hashed_password=pwd_context.hash(user.password)
     cursor.execute("""
     INSERT INTO users(
     id,
@@ -28,7 +31,7 @@ def register(user:UserRegister):
         user.first_name,
         user.last_name,
         user. email,
-        user.password
+       hashed_password
     )
     )
     conn.commit()
@@ -38,4 +41,23 @@ def register(user:UserRegister):
     }
 
 
+@router.post("/login")
+def login(user:UserLogin):
+    cursor.execute("""
+    SELECT * FROM users WHERE email = ?
+    """,
+    (user.email,))
+    user_data = cursor.fetchone()
+    if user_data is None:
+        return {
+        "message": "User not found"
+    }
+    if not pwd_context.verify(user.password,user_data["password"]):
+        return{
+            "message":"Invalid Password"
+        }
+    return {
+        "email":user.email,
+        "message":"User Login"
+    }
 
