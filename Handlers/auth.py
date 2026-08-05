@@ -3,13 +3,19 @@ import uuid
 from database.connection import conn, cursor
 from model.models import UserRegister, UserLogin
 from passlib.context import CryptContext
+from jose import jwt
+from datetime import datetime,timedelta
 # Router
 router= APIRouter()
+
+#password hashing
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
 )
-
+#JWT
+SECRET_KEY="my_secret_key"
+ALGORITHM="HS256"
 
 # To register users
 @router.post("/register")
@@ -56,8 +62,21 @@ def login(user:UserLogin):
         return{
             "message":"Invalid Password"
         }
+    expire=datetime.utcnow()+timedelta(minutes=30)
+
+    payload={
+
+            "user_id":user_data["id"],
+            "exp": expire
+            }
+    token=jwt.encode(
+        payload,
+        SECRET_KEY,
+        algorithm=ALGORITHM
+    )
     return {
         "email":user.email,
+        "token": token,
         "message":"User Login"
     }
 
