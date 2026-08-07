@@ -1,4 +1,4 @@
-from fastapi import APIRouter,HTTPException
+from fastapi import APIRouter,HTTPException,Header
 import uuid
 from database.connection import conn, cursor
 from model.models import UserRegister, UserLogin
@@ -93,5 +93,15 @@ def login(user:UserLogin):
         "email":user.email,
         "token": token,
         "message":"User Login"
+    }
+@router.get("/profile")
+def profile(authorization:str= Header()):
+    token=authorization.replace("Bearer ","")
+    payload=verify_token(token)
+
+    return {
+        "user_id":payload["user_id"],
+        "message":"Profile Access"
+
     }
 
