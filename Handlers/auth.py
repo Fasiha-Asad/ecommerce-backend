@@ -126,6 +126,27 @@ def upd_user(user: UserUpdate,authorization:str=Header()):
     conn.commit()
 
     return {
-        "message" :"User Update successfully"
+        "message" :"User Updated successfully"
     }
+
+@router.delete("/delete")
+def del_user(authorization:str=Header()):
+    token=authorization.replace("Bearer ","")
+    payload=verify_token(token)
+    user_id=payload["user_id"]
+
+    cursor.execute("""
+    DELETE FROM users
+    where id=?
+    """,
+    (
+     user_id
+    )
+    )
+    conn.commit()
+
+    return {
+        "message" :"User Deleted successfully"
+    }
+
 
