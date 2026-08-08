@@ -1,7 +1,7 @@
 from fastapi import APIRouter,HTTPException,Header
 import uuid
 from database.connection import conn, cursor
-from model.models import UserRegister, UserLogin
+from model.models import UserRegister, UserLogin,UserUpdate
 from passlib.context import CryptContext
 from jose import jwt,JWTError
 from datetime import datetime,timedelta,timezone
@@ -103,5 +103,29 @@ def profile(authorization:str= Header()):
         "user_id":payload["user_id"],
         "message":"Profile Access"
 
+    }
+
+@router.put("/update")
+def upd_user(user: UserUpdate,authorization:str=Header()):
+    token=authorization.replace("Bearer ","")
+    payload=verify_token(token)
+    user_id=payload["user_id"]
+
+    cursor.execute("""
+    UPDATE users
+    SET first_name=?, last_name=?, phone=?
+    WHERE id=?
+    """,
+    (
+        user.first_name,
+        user.last_name,
+        user.phone,
+        user_id
+    )
+    )
+    conn.commit()
+
+    return {
+        "message" :"User Update successfully"
     }
 
