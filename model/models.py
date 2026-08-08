@@ -19,3 +19,14 @@ class UserUpdate(BaseModel):
     first_name: str
     last_name: str
     phone: str
+
+class ProductCreate(BaseModel):
+    name: str
+    description: str
+    sku: str
+    category: str
+    brand: str
+    price: float
+    stock: int
+    image_url: str
+    is_active: bool
