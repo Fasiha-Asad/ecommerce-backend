@@ -93,10 +93,18 @@ def upd_product(id:str,upd_product:ProductUpdate):
         "message": "Product updated successfully"
     }
     
+@router.delete("/products/{id}")
+def del_product(id:str):
+    cursor.execute("""
+    DELETE from products 
+    WHERE id=?
+    """,(id,))
 
+    conn.commit()
 
-    
-
+    return {
+        "message": "Product deleted successfully"
+    }
 
 
 
