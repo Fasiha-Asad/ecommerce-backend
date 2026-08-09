@@ -45,8 +45,4 @@ class ProductUpdate(BaseModel):
 
 class CartItemsCreate(BaseModel):
     product_id:str
-    quantity:str
-
-class CartItemsCreate(BaseModel):
-    product_id: str
-    quantity: int
+    quantity:int
