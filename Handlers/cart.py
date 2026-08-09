@@ -20,7 +20,12 @@ def additemscart (items:CartItemsCreate):
     cart=cursor.fetchone()
     cart_id=cart[0]
    
-
+    cursor.execute("""
+    SELECT price FROM products WHERE id =?
+    """,
+    (items.product_id,))
+    product=cursor.fetchone()
+    unit_price=product[0]
 
     cursor.execute("""
     INSERT INTO cart_items(
