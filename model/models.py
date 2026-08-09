@@ -42,3 +42,7 @@ class ProductUpdate(BaseModel):
     stock: int
     image_url: str
     is_active: bool
+
+class CartItemsCreate(BaseModel):
+    product_id:str
+    quantity:str
