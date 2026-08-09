@@ -46,3 +46,6 @@ class ProductUpdate(BaseModel):
 class CartItemsCreate(BaseModel):
     product_id:str
     quantity:int
+
+class CartItemUpdate(BaseModel):
+    quantity: int

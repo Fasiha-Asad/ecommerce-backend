@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from database.connection import conn,cursor
-from model.models import CartItemsCreate
+from model.models import CartItemsCreate,CartItemUpdate
 router=APIRouter()
 import uuid
 @router.get("/cart")
@@ -44,9 +44,42 @@ def additemscart (items:CartItemsCreate):
         unit_price
     ))
 
-     conn.commit()
+    conn.commit()
 
     return {
         "message": "Add items successfully"
 
     }   
+
+@router.put("/cart/items/{itemid}")
+def upd_cart(itemid:str,upd_cart:CartItemUpdate):
+    cursor.execute("""
+    UPDATE cart_items
+    SET
+        quantity=?
+    WHERE id=?
+    """,
+    (
+        upd_cart.quantity,
+        itemid
+    ))
+
+    conn.commit()
+
+    return {
+        "message": "Cart item updated successfully"
+    }
+
+@router.delete("/cart/items/{itemid}")
+def del_cart(itemid:str):
+    cursor.execute("""
+    DELETE from cart_items
+    WHERE id=?
+    """,(itemid,))
+
+    conn.commit()
+
+    return {
+        "message": "Cart item deleted successfully"
+    }
+    
