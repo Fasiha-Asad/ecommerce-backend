@@ -30,3 +30,15 @@ class ProductCreate(BaseModel):
     stock: int
     image_url: str
     is_active: bool
+
+
+class ProductUpdate(BaseModel):
+    name: str
+    description: str
+    sku: str
+    category: str
+    brand: str
+    price: float
+    stock: int
+    image_url: str
+    is_active: bool

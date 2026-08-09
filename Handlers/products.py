@@ -56,4 +56,5 @@ def create_product(product:ProductCreate):
         "id":product_id,
         "message": "product created successfully"
 
-    }    
+    }   
+
