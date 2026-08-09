@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from database.connection import conn, cursor
-from model.models import ProductCreate
+from model.models import ProductCreate,ProductUpdate
 import uuid
 router= APIRouter()
 @router.get("/products")
@@ -57,4 +57,46 @@ def create_product(product:ProductCreate):
         "message": "product created successfully"
 
     }   
+
+@router.put("/products/{id}") 
+def upd_product(id:str,upd_product:ProductUpdate):
+    cursor.execute("""
+    UPDATE products
+     SET
+        name=?,
+        description=?,
+        sku=?,
+        category=?,
+        brand=?,
+        price=?,
+        stock=?,
+        image_url=?,
+        is_active=?
+    WHERE id=?
+    """,
+    (
+        upd_product.name,
+        upd_product.description,
+        upd_product.sku,
+        upd_product.category,
+        upd_product.brand,
+        upd_product.price,
+        upd_product.stock,
+        upd_product.image_url,
+        upd_product.is_active,
+        id
+    ))
+
+    conn.commit()
+
+    return {
+        "message": "Product updated successfully"
+    }
+    
+
+
+    
+
+
+
 
