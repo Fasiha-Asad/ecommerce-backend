@@ -82,4 +82,17 @@ def del_cart(itemid:str):
     return {
         "message": "Cart item deleted successfully"
     }
+
+@router.delete("/cart")
+def clear_cart():
+    cursor.execute("""
+    DELETE from cart_items
+    """)
+
+    conn.commit()
+
+    return {
+        "message": "Cart cleared successfully"
+    }
+  
     
