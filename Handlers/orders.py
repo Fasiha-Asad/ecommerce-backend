@@ -15,8 +15,6 @@ def create_order(order:OrderCreate):
     cart_id=cart[0]
     user_id=cart[1]
 
-    
-
     cursor.execute("""
     SELECT product_id,quantity,unit_price 
     FROM cart_items
@@ -59,6 +57,18 @@ def create_order(order:OrderCreate):
     for item in cart_items:
         order_item_id=str(uuid.uuid4())
         subtotal=item[1]*item[2]
+
+        cursor.execute("""
+        SELECT stock 
+        FROM products 
+        WHERE id=?
+        """,(item[0],))
+        product=cursor.fetchone()
+        if product[0]<item[1]:#stock
+            return {          #quantity
+               "message": "Not enough stock"
+               }
+
         cursor.execute("""
         INSERT INTO order_items(
         id ,
@@ -77,6 +87,18 @@ def create_order(order:OrderCreate):
             item[2],
             subtotal
          ))
+        
+
+        cursor.execute("""
+        UPDATE products
+        SET stock=stock-?
+        WHERE id=?
+        """,
+        (
+
+            item[1],
+            item[0]
+        ))
 
     conn.commit()
     return {
