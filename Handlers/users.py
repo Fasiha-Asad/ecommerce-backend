@@ -42,6 +42,22 @@ def upd_current_user(user:UserUpdate,authorization:str=Header()):
         "messages":"User updated successfully"
     }
 
-
+@router.delete("/users/me")
+def del_current_user(authorization:str=Header()):
+    token=authorization.replace("Bearer ","")
+    payload=verify_token(token)
+    user_id=payload["user_id"]
+    
+    cursor.execute("""
+    DELETE FROM users 
+    WHERE id=?
+    """,
+    (
+        user_id
+    ))
+    conn.commit()
+    return {
+        "messages":"User deleted successfully"
+    }
 
 
