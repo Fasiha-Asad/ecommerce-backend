@@ -105,4 +105,12 @@ def create_order(order:OrderCreate):
         "message":" Order created successfully"
     }
     
+@router.get("/orders")
+def get_order(user_id:str):
+    cursor.execute("""
+    SELECT *FROM orders
+    WHERE user_id=?
+    """,(user_id,))
+    orders=cursor.fetchall()
+    return orders
     
