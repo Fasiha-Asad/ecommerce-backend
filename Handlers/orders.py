@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from database.connection import conn,cursor
-from model.models import OrderCreate
+from model.models import OrderCreate,OrderStatus
 import uuid
 from datetime import datetime
 router=APIRouter()
@@ -123,3 +123,18 @@ def get_order(id:str):
     orders=cursor.fetchone()
     return orders
 
+@router.patch("/orders/{id}/status")
+def upd_oderstatus(id:str,order:OrderStatus):
+    cursor.execute("""
+    UPDATE orders 
+    SET status=?
+    WHERE id=?
+    """,
+    (
+        order.status,
+        id
+    ))
+    conn.commit()
+    return {
+        "message":"Update order status successfully"
+    }
