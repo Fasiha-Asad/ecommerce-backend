@@ -114,3 +114,11 @@ def get_order(user_id:str):
     orders=cursor.fetchall()
     return orders
     
+@router.get("/orders/{id}")
+def get_order(id:str):
+    cursor.execute("""
+    SELECT *FROM orders
+    WHERE id=?
+    """,(id,))
+    orders=cursor.fetchone()
+    return orders
