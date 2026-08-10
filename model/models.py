@@ -49,3 +49,7 @@ class CartItemsCreate(BaseModel):
 
 class CartItemUpdate(BaseModel):
     quantity: int
+
+class OrderCreate(BaseModel):
+    shipping_address: str
+    payment_method: str
