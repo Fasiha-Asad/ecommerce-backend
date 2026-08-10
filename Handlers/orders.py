@@ -1,4 +1,65 @@
 from fastapi import APIRouter
 from database.connection import conn,cursor
 from model.models import OrderCreate
+import uuid
+from datetime import datetime
 router=APIRouter()
+
+@router.post("/orders")
+def create_order(order:OrderCreate):
+
+    cursor.execute("""
+    SELECT id,user_id FROM carts
+    """)
+    cart=cursor.fetchone()
+    cart_id=cart[0]
+    user_id=cart[1]
+
+    
+
+    cursor.execute("""
+    SELECT product_id,quantity,unit_price 
+    FROM cart_items
+    where cart_id=?
+    """,(cart_id,))
+    cart_items=cursor.fetchall()
+
+    total_amount=0
+    for item in cart_items:
+        total_amount+=item[1]*item[2]
+    
+    order_id=str(uuid.uuid4())
+    status="pending"
+    created_at = datetime.now()
+    updated_at = datetime.now()
+
+
+    cursor.execute("""
+    INSERT INTO orders(
+    id ,
+    user_id ,
+    status  ,
+    total_amount ,
+    shipping_address ,
+    payment_method	,
+    created_at	,
+    updated_at 
+    VALUES(?,?,?,?,?,?,?,?)
+    """,
+    (
+        order_id,
+        user_id ,
+        status  ,
+        total_amount ,
+        order.shipping_address ,
+        order.payment_method	,
+        created_at	,
+        updated_at 
+    ))
+
+    conn.commit()
+    return {
+        "message":" Order created successfully"
+    }
+    
+    
