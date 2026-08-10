@@ -64,4 +64,3 @@ product_id TEXT,
 quantity	Integer,
 unit_price	REAL,
 subtotal    REAL)"""
-#Cart Complete

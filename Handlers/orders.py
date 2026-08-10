@@ -56,6 +56,27 @@ def create_order(order:OrderCreate):
         created_at	,
         updated_at 
     ))
+    for item in cart_items:
+        order_item_id=str(uuid.uuid4())
+        subtotal=item[1]*item[2]
+        cursor.execute("""
+        INSERT INTO order_items(
+        id ,
+        order_id, 
+        product_id, 
+        quantity,	
+        unit_price,	
+        subtotal )
+        VALUES(?,?,?,?,?,?) 
+         """,
+         (
+            order_item_id,
+            order_id,
+            item[0],
+            item[1],
+            item[2],
+            subtotal
+         ))
 
     conn.commit()
     return {
