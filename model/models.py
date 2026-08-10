@@ -53,3 +53,6 @@ class CartItemUpdate(BaseModel):
 class OrderCreate(BaseModel):
     shipping_address: str
     payment_method: str
+
+class OrderStatus(BaseModel):
+    status: str
