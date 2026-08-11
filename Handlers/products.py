@@ -101,11 +101,10 @@ def del_product(id:str):
     """,(id,))
 
     conn.commit()
-
+# Returning  resp
     return {
         "message": "Product deleted successfully"
     }
-
 
 
 
