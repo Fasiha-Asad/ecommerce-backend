@@ -1,12 +1,20 @@
-from fastapi import APIRouter,Header
+from fastapi import APIRouter,Header,Depends
+from fastapi.security import APIKeyHeader
 from database.connection import conn,cursor
 from handlers.auth import verify_token
 from model.models import UserUpdate
+
+authorization_header = APIKeyHeader(
+    name="Authorization"
+)
+
 router=APIRouter()
 
+
 @router.get("/users/me")
-def get_current_user(authorization:str=Header()):
-    token=authorization.replace("Bearer ","")
+def get_current_user(authorization: str = Depends(authorization_header)):
+
+    token = authorization.replace("Bearer ", "")
     payload=verify_token(token)
     user_id=payload["user_id"]
 
@@ -19,7 +27,7 @@ def get_current_user(authorization:str=Header()):
     return user
 
 @router.put("/users/me")
-def upd_current_user(user:UserUpdate,authorization:str=Header()):
+def upd_current_user(user:UserUpdate,authorization:str= Depends(authorization_header)):
     token=authorization.replace("Bearer ","")
     payload=verify_token(token)
     user_id=payload["user_id"]
@@ -43,7 +51,7 @@ def upd_current_user(user:UserUpdate,authorization:str=Header()):
     }
 
 @router.delete("/users/me")
-def del_current_user(authorization:str=Header()):
+def del_current_user(authorization:str= Depends(authorization_header)):
     token=authorization.replace("Bearer ","")
     payload=verify_token(token)
     user_id=payload["user_id"]

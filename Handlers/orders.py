@@ -41,7 +41,7 @@ def create_order(order:OrderCreate):
     shipping_address ,
     payment_method	,
     created_at	,
-    updated_at 
+    updated_at )
     VALUES(?,?,?,?,?,?,?,?)
     """,
     (

@@ -16,7 +16,7 @@ products_table_query="""
 CREATE TABLE IF NOT EXISTS products(
 id  TEXT PRIMARY KEY ,
 name TEXT,
-descri TEXT,
+description TEXT,
 sku  TEXT UNIQUE,
 category TEXT,
 brand TEXT,
